@@ -19,7 +19,6 @@ class ReportUtil {
     await report.save();
 
     if (type === 'alertaIngresoFallido') {
-      console.log("HOLA VOY A ENVIAR MENSAJES DESDE TWILIO");
       const numbers = ['+56962038649', '+56963712420'];
       numbers.forEach(async (number) => {
         const message = await this.twilioClient.messages
@@ -28,11 +27,11 @@ class ReportUtil {
             from: 'whatsapp:+14155238886',
             to: `whatsapp:${number}`
           });
-        console.log(`Mensaje enviado a ${message.to} enviado.`);
+        console.log(`Mensaje enviado a ${message.to}.`);
       });
     }
 
-    console.log("Reporte creado");
+    console.log(`Reporte '${type}' creado.`);
     return report;
   }
 }
