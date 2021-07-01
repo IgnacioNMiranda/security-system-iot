@@ -1,35 +1,59 @@
+const tableHead = document.getElementById('tableHead');
 const tableBody = document.getElementById("tableBody");
 
 (async function() {
-  const response = await fetch('http://localhost:3000/reports', {
-    method: 'GET',
-    cache: 'no-cache',
-    credentials: 'same-origin',
-  });
+  try {
+    const response = await fetch('http://localhost:3000/reports', {
+      method: 'GET',
+      cache: 'no-cache',
+      credentials: 'same-origin',
+    });
 
-  const reports = await response.json();
+    const reports = await response.json();
 
-  reports.forEach(report => {
-    const { date } = report;
-    const parsedDate = new Date(date);
+    if (reports.length == 0) {
+      return;
+    }
 
-    const day = ("" + parsedDate.getDay()).length == 1 ? "0" + parsedDate.getDay() : parsedDate.getDay();
-    const month = ("" + parsedDate.getMonth()).length == 1 ? "0" + parsedDate.getMonth() : parsedDate.getMonth();
-    const year = ("" + parsedDate.getFullYear()).length == 1 ? "0" + parsedDate.getFullYear() : parsedDate.getFullYear();
-    const formattedDate = `${day}/${month}/${year}`;
+    tableHead.innerHTML =
+      `
+      <tr>
+        <td>Fecha</td>
+        <td>Hora</td>
+        <td>Tipo</td>
+      </tr>
+      `;
 
-    const hour = ("" + parsedDate.getHours()).length == 1 ? "0" + parsedDate.getHours() : parsedDate.getHours();
-    const minutes = ("" + parsedDate.getMinutes()).length == 1 ? "0" + parsedDate.getMinutes() : parsedDate.getMinutes();
-    const seconds = ("" + parsedDate.getSeconds()).length == 1 ? "0" + parsedDate.getSeconds() : parsedDate.getSeconds();
-    const formattedTime = `${hour}:${minutes}:${seconds}`;
+    reports.forEach(report => {
+      const { date } = report;
+      const parsedDate = new Date(date);
 
+      const day = ("" + parsedDate.getDate()).length == 1 ? "0" + parsedDate.getDate() : parsedDate.getDate();
+      const month = ("" + (parsedDate.getMonth() + 1)).length == 1 ? "0" + (parsedDate.getMonth() + 1) : (parsedDate.getMonth() + 1);
+      const year = ("" + parsedDate.getFullYear()).length == 1 ? "0" + parsedDate.getFullYear() : parsedDate.getFullYear();
+      const formattedDate = `${day}/${month}/${year}`;
+
+      const hour = ("" + parsedDate.getHours()).length == 1 ? "0" + parsedDate.getHours() : parsedDate.getHours();
+      const minutes = ("" + parsedDate.getMinutes()).length == 1 ? "0" + parsedDate.getMinutes() : parsedDate.getMinutes();
+      const seconds = ("" + parsedDate.getSeconds()).length == 1 ? "0" + parsedDate.getSeconds() : parsedDate.getSeconds();
+      const formattedTime = `${hour}:${minutes}:${seconds}`;
+
+      tableBody.innerHTML +=
+        `
+        <tr>
+          <td>${formattedDate}</td>
+          <td>${formattedTime}</td>
+          <td>${report.type}</td>
+        </tr>
+        `;
+    });
+  } catch (error) {
     tableBody.innerHTML +=
       `
       <tr>
-        <td>${formattedDate}</td>
-        <td>${formattedTime}</td>
-        <td>${report.type}</td>
+        <td>No se pudo obtener información sobre los reportes.</td>
       </tr>
       `;
-  });
+  }
+
 })();
