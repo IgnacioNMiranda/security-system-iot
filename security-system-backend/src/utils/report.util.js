@@ -1,4 +1,3 @@
-import { Report } from '../database/models/report.model.js';
 import twilio from 'twilio';
 
 class ReportUtil {
@@ -9,30 +8,23 @@ class ReportUtil {
     );
   }
 
-  async createReport(type) {
-    const date = new Date();
-
-    const report = new Report({
-      date,
-      type
-    });
-    await report.save();
-
+  async sendTwilioReportMessages(type) {
     if (type === 'alertaIngresoFallido') {
       const numbers = ['+56962038649', '+56963712420'];
       numbers.forEach(async (number) => {
-        const message = await this.twilioClient.messages
-        .create({
-            body: '¡ALERTA! Han ocurrido numerosos intentos de acceso a la puerta 02. Se recomienda precaución.',
-            from: 'whatsapp:+14155238886',
-            to: `whatsapp:${number}`
-          });
-        console.log(`Mensaje enviado a ${message.to}.`);
+        try {
+          const message = await this.twilioClient.messages
+          .create({
+              body: '¡ALERTA! Han ocurrido numerosos intentos de acceso a la puerta 02. Se recomienda precaución.',
+              from: 'whatsapp:+14155238886',
+              to: `whatsapp:${number}`
+            });
+          console.log(`Mensaje enviado a ${message.to}.`);
+        } catch (error) {
+          console.log(`Error enviando mensaje a ${number}`);
+        }
       });
     }
-
-    console.log(`Reporte '${type}' creado.`);
-    return report;
   }
 }
 

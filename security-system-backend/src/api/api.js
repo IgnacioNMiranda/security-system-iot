@@ -17,7 +17,7 @@ class Api {
       })
     );
     this.api.listen(configuration.api.port, () => {
-        console.log('server on port', configuration.api.port);
+        console.log('Server on port', configuration.api.port);
     });
 
     this.api.use(ReportRouter.path, new ReportRouter().router);

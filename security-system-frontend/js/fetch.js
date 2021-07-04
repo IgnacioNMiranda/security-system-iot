@@ -12,6 +12,12 @@ const tableBody = document.getElementById("tableBody");
     const reports = await response.json();
 
     if (reports.length == 0) {
+      tableBody.innerHTML +=
+      `
+      <tr>
+        <td>No hay reportes registrados en el sistema.</td>
+      </tr>
+      `;
       return;
     }
 
