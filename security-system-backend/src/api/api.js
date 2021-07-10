@@ -21,6 +21,9 @@ class Api {
     });
 
     this.api.use(ReportRouter.path, new ReportRouter().router);
+    this.api.get('/', (req, res) => {
+      res.send('OK status - Security System');
+    })
   }
 }
 
