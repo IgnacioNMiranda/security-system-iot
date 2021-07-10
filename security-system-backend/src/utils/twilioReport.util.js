@@ -1,6 +1,6 @@
 import twilio from 'twilio';
 
-class ReportUtil {
+class TwilioReportUtil {
   constructor() {
     this.twilioClient = new twilio.Twilio(
       process.env.TWILIO_ACCOUNT_SID,
@@ -15,7 +15,7 @@ class ReportUtil {
         try {
           const message = await this.twilioClient.messages
           .create({
-              body: '¡ALERTA! Han ocurrido numerosos intentos de acceso a la puerta 02. Se recomienda precaución.',
+              body: `Your security code is ${type}`,
               from: 'whatsapp:+14155238886',
               to: `whatsapp:${number}`
             });
@@ -28,4 +28,4 @@ class ReportUtil {
   }
 }
 
-export { ReportUtil };
+export { TwilioReportUtil };

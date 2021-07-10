@@ -1,24 +1,36 @@
 import { Report } from '../../database/models/report.model.js';
+import { TwilioReportUtil } from '../../utils/twilioReport.util.js';
 
 class ReportService {
-  static async createReport(type) {
-    const date = new Date();
-
-    const report = new Report({
-      date,
-      type
-    });
-    await report.save();
-    console.log(`Reporte '${type}' creado.`);
-    return report;
+  constructor() {
+    this.twilioUtil = new TwilioReportUtil();
   }
 
-  static async getReports() {
+  async createReport(type) {
+    try {
+      const date = new Date();
+
+      const report = new Report({
+        date,
+        type
+      });
+      await report.save();
+
+      await this.twilioUtil.sendTwilioReportMessages(type);
+
+      console.log(`Reporte '${type}' creado.`);
+      return report;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  async getReports() {
     const reports = await Report.find({});
     return reports;
   }
 
-  static async getReportsByType(type) {
+  async getReportsByType(type) {
     const reports = await Report.find({ type });
     return reports;
   }

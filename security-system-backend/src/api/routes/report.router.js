@@ -8,9 +8,11 @@ class ReportRouter {
     this.router = express.Router();
     this.controller = new ReportController();
 
-    this.router.get('/', this.controller.getAllReports);
+    this.router.post('/', this.controller.createReport.bind(this.controller));
 
-    this.router.get('/:type', this.controller.getReportByType);
+    this.router.get('/', this.controller.getAllReports.bind(this.controller));
+
+    this.router.get('/:type', this.controller.getReportByType.bind(this.controller));
   }
 }
 
