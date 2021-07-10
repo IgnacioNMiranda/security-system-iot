@@ -3,10 +3,14 @@ const tableBody = document.getElementById("tableBody");
 
 (async function() {
   try {
-    const response = await fetch('http://localhost:3000/reports', {
+    const response = await fetch('https://security-system-backend.herokuapp.com/reports', {
       method: 'GET',
+      mode: "cors",
       cache: 'no-cache',
       credentials: 'same-origin',
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      }
     });
 
     const reports = await response.json();

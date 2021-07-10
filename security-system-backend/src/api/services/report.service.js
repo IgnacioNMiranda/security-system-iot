@@ -26,13 +26,21 @@ class ReportService {
   }
 
   async getReports() {
-    const reports = await Report.find({});
-    return reports;
+    try {
+      const reports = await Report.find({});
+      return reports;
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   async getReportsByType(type) {
-    const reports = await Report.find({ type });
-    return reports;
+    try {
+      const reports = await Report.find({ type });
+      return reports;
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
 
